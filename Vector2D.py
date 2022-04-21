@@ -6,7 +6,7 @@ class Vector2D:
         self.x = x
         self.y = y
 
-    def multiply(self, size):
+    def __mul__(self, size):
         return Vector2D(self.x * size, self.y * size)
 
     def __iadd__(self, other):
@@ -35,6 +35,7 @@ class Vector2D:
     def rotate(self, angle):
         self.x = self.x * cos(angle) - self.y * sin(angle)
         self.y = self.x * sin(angle) + self.y * cos(angle)
+        self /= self.length
         return self
 
     @property

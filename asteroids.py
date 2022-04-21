@@ -8,12 +8,15 @@ HEIGHT = 700
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("noname_game")
 bg = pygame.image.load('bg.png')
+units = []
 
 def main():
     global window
+    global units
+
     pygame.init()
     clock = pygame.time.Clock()
-    ship = Ship()
+    units.append(Ship())
 
     run = True
 
@@ -24,7 +27,9 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
 
-        ship.update()
+        for el in units:
+            el.update()
+        
         pygame.display.update()
         window.blit(bg, (0, 0))
 

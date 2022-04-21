@@ -1,16 +1,19 @@
-from turtle import position
+
+import math
 import pygame
 from Vector2D import *
 from asteroids import *
+from bullet import *
 
 class Ship:
 
-    acceleration = 2
+    global units
+    acceleration = 1
     reverse_acceleration = -0.05
     maxVelocity = 15
     angle = 0
 
-    ROTATION_ANGLE = 0.17
+    ROTATION_ANGLE = math.pi/18
 
     position = Vector2D(0, 0)
 
@@ -20,6 +23,7 @@ class Ship:
         self.ship_image = pygame.image.load('ship.png')
         self.direction = Vector2D(0, -1)
         self.velocity = Vector2D(0, 0)
+        print(units)
 
     def update(self): 
         self.move()
@@ -31,6 +35,9 @@ class Ship:
         self.x += self.velocity.x
         self.y += self.velocity.y
 
+        self.rotate()
+
+    def rotate(self):
         self.rotated = self.rot_center(self.angle)
         window.blit(self.rotated[0], (self.rotated[1].x, self.rotated[1].y))
 
@@ -48,15 +55,17 @@ class Ship:
             self.angle += 10
 
         elif self.keys[pygame.K_d]:
-            self.direction = self.direction.rotate(angle = -self.ROTATION_ANGLE)
+            self.direction = self.direction.rotate(angle = self.ROTATION_ANGLE)
             self.angle -= 10
 
         elif self.keys[pygame.K_s] and self.y <= HEIGHT:
-            self.velocity -= self.direction.multiply(self.acceleration)
+            self.velocity -= self.direction * self.acceleration
 
         elif self.keys[pygame.K_w] and self.y >= 0:
-            self.velocity += self.direction.multiply(self.acceleration)
-        print(self.velocity.length)
+            self.velocity += self.direction * self.acceleration
+        
+        if self.keys[pygame.K_SPACE]:
+            units.append(Bullet(self.x + self.velocity.x * 5, self.y + self.velocity.y * 5, self.velocity))
     
     def check_inbounds(self):
         if self.y >= HEIGHT + 66:
