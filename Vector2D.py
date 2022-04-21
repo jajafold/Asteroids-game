@@ -19,6 +19,19 @@ class Vector2D:
         self.y -= other.y
         return self
 
+    def __imul__(self, a):
+        self.x *= a
+        self.y *= a
+        return self
+
+    def __itruediv__(self, a):
+        self.x /= a
+        self.y /= a
+        return self
+    
+    def __str__(self) -> str:
+        return "{0},{1}".format(self.x, self.y)
+
     def rotate(self, angle):
         self.x = self.x * cos(angle) - self.y * sin(angle)
         self.y = self.x * sin(angle) + self.y * cos(angle)

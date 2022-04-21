@@ -1,51 +1,38 @@
+from turtle import position
 import pygame
 from Vector2D import *
-
-WIDTH = 1200
-HEIGHT = 700
-
-win = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("noname_game")
-bg = pygame.image.load('bg.png')
-
-
-def main():
-    global win
-    pygame.init()
-    clock = pygame.time.Clock()
-
-    ship = Ship()
-
-    run = True
-
-    while run:
-        clock.tick(30)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-
-        ship.update()
-        pygame.display.update()
-        win.blit(bg, (0, 0))
-
+from asteroids import *
 
 class Ship:
 
-    acceleration = 1
+    acceleration = 2
     reverse_acceleration = -0.05
-    maxVelocity = 10
+    maxVelocity = 15
     angle = 0
 
-    ROTATION_ANGLE = 0
+    ROTATION_ANGLE = 0.17
 
-    x = 500
-    y = 500
+    position = Vector2D(0, 0)
 
     def __init__(self):
+        self.x = 500
+        self.y = 500
         self.ship_image = pygame.image.load('ship.png')
         self.direction = Vector2D(0, -1)
         self.velocity = Vector2D(0, 0)
+
+    def update(self): 
+        self.move()
+        self.check_inbounds()
+        if self.velocity.length > self.maxVelocity:
+            self.velocity /= self.velocity.length
+            self.velocity *= self.maxVelocity
+
+        self.x += self.velocity.x
+        self.y += self.velocity.y
+
+        self.rotated = self.rot_center(self.angle)
+        window.blit(self.rotated[0], (self.rotated[1].x, self.rotated[1].y))
 
     def rot_center(self, angle):
         rotated_image = pygame.transform.rotate(self.ship_image, angle)
@@ -53,17 +40,15 @@ class Ship:
 
         return rotated_image, new_rect
 
-    def update(self):
-        global win
-
+    def move(self):
         self.keys = pygame.key.get_pressed()
 
         if self.keys[pygame.K_a]:
-            self.direction = self.direction.rotate(angle=-0.17)
+            self.direction = self.direction.rotate(angle = -self.ROTATION_ANGLE)
             self.angle += 10
 
         elif self.keys[pygame.K_d]:
-            self.direction = self.direction.rotate(angle=0.17)
+            self.direction = self.direction.rotate(angle = -self.ROTATION_ANGLE)
             self.angle -= 10
 
         elif self.keys[pygame.K_s] and self.y <= HEIGHT:
@@ -71,7 +56,9 @@ class Ship:
 
         elif self.keys[pygame.K_w] and self.y >= 0:
             self.velocity += self.direction.multiply(self.acceleration)
-
+        print(self.velocity.length)
+    
+    def check_inbounds(self):
         if self.y >= HEIGHT + 66:
             self.y = -33
         if self.y < -66:
@@ -80,16 +67,3 @@ class Ship:
             self.x = -33
         if self.x < -66:
             self.x = WIDTH + 33
-            
-        if self.velocity.length >= self.maxVelocity:
-            pass
-
-        self.y += self.velocity.y
-        self.x += self.velocity.x
-
-        self.b = self.rot_center(self.angle)
-        win.blit(self.b[0], (self.b[1].x, self.b[1].y))
-
-
-if __name__ == '__main__':
-    main()
