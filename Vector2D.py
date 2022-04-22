@@ -29,14 +29,15 @@ class Vector2D:
         self.y /= a
         return self
     
+    def __truediv__(self, a):
+        return Vector2D(self.x / a, self.y / a)
+    
     def __str__(self) -> str:
         return "{0},{1}".format(self.x, self.y)
 
     def rotate(self, angle):
-        self.x = self.x * cos(angle) - self.y * sin(angle)
-        self.y = self.x * sin(angle) + self.y * cos(angle)
-        self /= self.length
-        return self
+        newVec = Vector2D(self.x * cos(angle) - self.y * sin(angle), self.x * sin(angle) + self.y * cos(angle))
+        return newVec/newVec.length
 
     @property
     def length(self):

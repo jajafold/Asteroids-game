@@ -1,21 +1,18 @@
 
 import math
 import pygame
-from Vector2D import *
-from asteroids import *
-from bullet import *
+from Vector2D import Vector2D
+from bullet import Bullet
+from game_objects import GameConsts
 
 class Ship:
-
-    global units
+    shoot_delay = 10
     acceleration = 1
     reverse_acceleration = -0.05
     maxVelocity = 15
     angle = 0
-
+    
     ROTATION_ANGLE = math.pi/18
-
-    position = Vector2D(0, 0)
 
     def __init__(self):
         self.x = 500
@@ -23,10 +20,12 @@ class Ship:
         self.ship_image = pygame.image.load('ship.png')
         self.direction = Vector2D(0, -1)
         self.velocity = Vector2D(0, 0)
-        print(units)
+        self.shoot_delay = Ship.shoot_delay
+        self.can_shoot = True
 
     def update(self): 
         self.move()
+        self.fire()
         self.check_inbounds()
         if self.velocity.length > self.maxVelocity:
             self.velocity /= self.velocity.length
@@ -36,10 +35,24 @@ class Ship:
         self.y += self.velocity.y
 
         self.rotate()
+    
+    def fire(self):
+        keys = pygame.key.get_pressed()
+
+        if not self.can_shoot:
+            self.shoot_delay -= 1
+        
+        if self.shoot_delay <= 0:
+            self.can_shoot = True
+            
+        if keys[pygame.K_SPACE] and self.can_shoot:
+            GameConsts.units.append(Bullet(self.x + self.direction.x, self.y + self.direction.y, self.direction))
+            self.can_shoot = False
+            self.shoot_delay = Ship.shoot_delay
 
     def rotate(self):
         self.rotated = self.rot_center(self.angle)
-        window.blit(self.rotated[0], (self.rotated[1].x, self.rotated[1].y))
+        GameConsts.window.blit(self.rotated[0], (self.rotated[1].x, self.rotated[1].y))
 
     def rot_center(self, angle):
         rotated_image = pygame.transform.rotate(self.ship_image, angle)
@@ -48,31 +61,28 @@ class Ship:
         return rotated_image, new_rect
 
     def move(self):
-        self.keys = pygame.key.get_pressed()
+        keys = pygame.key.get_pressed()
 
-        if self.keys[pygame.K_a]:
+        if keys[pygame.K_a]:
             self.direction = self.direction.rotate(angle = -self.ROTATION_ANGLE)
             self.angle += 10
 
-        elif self.keys[pygame.K_d]:
+        if keys[pygame.K_d]:
             self.direction = self.direction.rotate(angle = self.ROTATION_ANGLE)
             self.angle -= 10
 
-        elif self.keys[pygame.K_s] and self.y <= HEIGHT:
+        if keys[pygame.K_s] and self.y <= GameConsts.HEIGHT:
             self.velocity -= self.direction * self.acceleration
 
-        elif self.keys[pygame.K_w] and self.y >= 0:
+        if keys[pygame.K_w] and self.y >= 0:
             self.velocity += self.direction * self.acceleration
-        
-        if self.keys[pygame.K_SPACE]:
-            units.append(Bullet(self.x + self.velocity.x * 5, self.y + self.velocity.y * 5, self.velocity))
     
     def check_inbounds(self):
-        if self.y >= HEIGHT + 66:
+        if self.y >= GameConsts.HEIGHT + 66:
             self.y = -33
         if self.y < -66:
-            self.y = HEIGHT + 33
-        if self.x >= WIDTH + 66:
+            self.y = GameConsts.HEIGHT + 33
+        if self.x >= GameConsts.WIDTH + 66:
             self.x = -33
         if self.x < -66:
-            self.x = WIDTH + 33
+            self.x = GameConsts.WIDTH + 33
