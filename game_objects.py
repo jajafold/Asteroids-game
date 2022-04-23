@@ -10,6 +10,8 @@ class GameObjects:
     pygame.display.set_caption("Asteroids")
     bg = pygame.image.load('bg.png')
     units = []
+    bullets = {}
+    asteroids = {}
     alive_asteroids = 0
 
 

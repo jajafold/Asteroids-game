@@ -46,7 +46,7 @@ class Ship:
             self.can_shoot = True
             
         if keys[pygame.K_SPACE] and self.can_shoot:
-            GameObjects.units.append(Bullet(self.x + self.direction.x, self.y + self.direction.y, self.direction))
+            Bullet(self.x + self.direction.x, self.y + self.direction.y, self.direction)
             self.can_shoot = False
             self.SHOOT_DELAY = Ship.SHOOT_DELAY
 
