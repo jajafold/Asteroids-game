@@ -2,42 +2,57 @@ import math
 import pygame
 from Vector2D import Vector2D
 from bullet import Bullet
-from game import Game
+from game_objects import GameObjects
 
 
 class Ship:
-    acceleration = 1
-    reverse_acceleration = -0.05
-    maxVelocity = 15
-    angle = 0
-
+    SHOOT_DELAY = 10
+    ACCELERATION = 1
+    REVERSE_ACCELERATION = -0.05
+    MAX_VELOCITY = 15
     ROTATION_ANGLE = math.pi/18
 
-    position = Vector2D(0, 0)
+    angle = 0
 
-    def __init__(self, game: Game):
+    def __init__(self):
         self.x = 500
         self.y = 500
         self.ship_image = pygame.image.load('ship.png')
         self.direction = Vector2D(0, -1)
         self.velocity = Vector2D(0, 0)
-        self.game = game
+        self.SHOOT_DELAY = Ship.SHOOT_DELAY
+        self.can_shoot = True
 
     def update(self): 
         self.move()
+        self.fire()
         self.check_inbounds()
-        if self.velocity.length > self.maxVelocity:
+        if self.velocity.length > self.MAX_VELOCITY:
             self.velocity /= self.velocity.length
-            self.velocity *= self.maxVelocity
+            self.velocity *= self.MAX_VELOCITY
 
         self.x += self.velocity.x
         self.y += self.velocity.y
 
         self.rotate()
+    
+    def fire(self):
+        keys = pygame.key.get_pressed()
+
+        if not self.can_shoot:
+            self.SHOOT_DELAY -= 1
+        
+        if self.SHOOT_DELAY <= 0:
+            self.can_shoot = True
+            
+        if keys[pygame.K_SPACE] and self.can_shoot:
+            GameObjects.units.append(Bullet(self.x + self.direction.x, self.y + self.direction.y, self.direction))
+            self.can_shoot = False
+            self.SHOOT_DELAY = Ship.SHOOT_DELAY
 
     def rotate(self):
-        self.rotated = self.rot_center(self.angle)
-        self.game.window.blit(self.rotated[0], (self.rotated[1].x, self.rotated[1].y))
+        rotated = self.rot_center(self.angle)
+        GameObjects.window.blit(rotated[0], (rotated[1].x, rotated[1].y))
 
     def rot_center(self, angle):
         rotated_image = pygame.transform.rotate(self.ship_image, angle)
@@ -46,31 +61,28 @@ class Ship:
         return rotated_image, new_rect
 
     def move(self):
-        self.keys = pygame.key.get_pressed()
+        keys = pygame.key.get_pressed()
 
-        if self.keys[pygame.K_a]:
-            self.direction = self.direction.rotate(angle = -self.ROTATION_ANGLE)
+        if keys[pygame.K_a]:
+            self.direction = self.direction.rotate(angle=-self.ROTATION_ANGLE)
             self.angle += 10
 
-        if self.keys[pygame.K_d]:
-            self.direction = self.direction.rotate(angle = self.ROTATION_ANGLE)
+        if keys[pygame.K_d]:
+            self.direction = self.direction.rotate(angle=self.ROTATION_ANGLE)
             self.angle -= 10
 
-        if self.keys[pygame.K_s] and self.y <= Game.HEIGHT:
-            self.velocity -= self.direction * self.acceleration
+        if keys[pygame.K_s] and self.y <= GameObjects.HEIGHT:
+            self.velocity -= self.direction * self.ACCELERATION
 
-        if self.keys[pygame.K_w] and self.y >= 0:
-            self.velocity += self.direction * self.acceleration
-        
-        if self.keys[pygame.K_SPACE]:
-            self.game.units.append(Bullet(self.x + self.velocity.x * 5, self.y + self.velocity.y * 5, self.velocity))
+        if keys[pygame.K_w] and self.y >= 0:
+            self.velocity += self.direction * self.ACCELERATION
     
     def check_inbounds(self):
-        if self.y >= Game.HEIGHT + 66:
+        if self.y >= GameObjects.HEIGHT + 66:
             self.y = -33
         if self.y < -66:
-            self.y = Game.HEIGHT + 33
-        if self.x >= Game.WIDTH + 66:
+            self.y = GameObjects.HEIGHT + 33
+        if self.x >= GameObjects.WIDTH + 66:
             self.x = -33
         if self.x < -66:
-            self.x = Game.WIDTH + 33
+            self.x = GameObjects.WIDTH + 33
