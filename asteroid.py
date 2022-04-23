@@ -6,10 +6,11 @@ import random
 from Vector2D import Vector2D
 
 
-class Asteroid():
+class Asteroid(pygame.sprite.Sprite):
     skins = ["meteor_big.png", "meteor_medium.png", "meteor_small.png"]
     
     def __init__(self, x, y, direction: Vector2D):
+        pygame.sprite.Sprite.__init__(self)
         self.x = x
         self.y = y
         self.direction = direction
@@ -28,12 +29,16 @@ class Asteroid():
         GameObjects.window.blit(self.image, (self.x, self.y))
 
     def detect_collision(self):
-        pygame.draw.rect(GameObjects.window, (255, 255, 255), self.offset_rect, 1)
-        
+        to_delete = False
         for bullet in GameObjects.bullets.keys():
             if pygame.Rect.colliderect(self.offset_rect, GameObjects.bullets[bullet]):
-                print(self.offset_rect, "hit py player")
+                bullet_to_delete = bullet
+                to_delete = True
                 break
+        if (to_delete):
+            GameObjects.alive_asteroids -= 1
+            bullet_to_delete.kill()
+            self.kill()
 
     @property
     def offset_rect(self):

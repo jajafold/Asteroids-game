@@ -5,7 +5,7 @@ from bullet import Bullet
 from game_objects import GameObjects
 
 
-class Ship:
+class Ship(pygame.sprite.Sprite):
     SHOOT_DELAY = 10
     ACCELERATION = 1
     REVERSE_ACCELERATION = -0.05
@@ -15,6 +15,7 @@ class Ship:
     angle = 0
 
     def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
         self.x = 500
         self.y = 500
         self.ship_image = pygame.image.load('ship.png')
