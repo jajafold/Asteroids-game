@@ -1,5 +1,5 @@
 import pygame
-from game_objects import GameConsts
+from game_objects import GameObjects
 
 class Bullet:
     VELOCITY_CONST = 50
@@ -12,4 +12,4 @@ class Bullet:
     def update(self):
         self.x += self.velocity.x
         self.y += self.velocity.y
-        GameConsts.window.blit(self.bullet_image, (self.x, self.y))
+        GameObjects.window.blit(self.bullet_image, (self.x, self.y))
