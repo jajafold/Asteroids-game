@@ -5,7 +5,7 @@ import pygame
 class GameObjects:
     WIDTH = 1200
     HEIGHT = 700
-    MAX_ASTEROIDS = 10
+    MAX_ASTEROIDS = 20
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Asteroids")
     bg = pygame.image.load('bg.png')

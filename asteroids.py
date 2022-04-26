@@ -10,7 +10,8 @@ from Vector2D import get_random_vector
 def main():
     pygame.init()
     clock = pygame.time.Clock()
-    GameObjects.unit_group.add(Ship())
+    ship = Ship()
+    GameObjects.unit_group.add(ship)
 
     run = True
   
@@ -24,6 +25,9 @@ def main():
             GameObjects.alive_asteroids += 1
             rand_point = game_objects.get_random_corner()
             GameObjects.asteroid_group.add(Asteroid(rand_point[0], rand_point[1], get_random_vector()))
+
+        if not ship.alive:
+            run = False
 
         GameObjects.unit_group.update()
         GameObjects.bullets_group.update()

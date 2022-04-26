@@ -13,7 +13,7 @@ class Asteroid(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.x = x
         self.y = y
-        self.direction = direction
+        self.direction = direction * random.randint(1, 3)
         self.image = pygame.image.load(random.choice(Asteroid.skins))
         self.rect = self.image.get_bounding_rect()
 
@@ -29,16 +29,17 @@ class Asteroid(pygame.sprite.Sprite):
         GameObjects.window.blit(self.image, (self.x, self.y))
 
     def detect_collision(self):
-        to_delete = False
+        bullet_to_delete = None
         for bullet in GameObjects.bullets.keys():
             if pygame.Rect.colliderect(self.offset_rect, GameObjects.bullets[bullet]):
                 bullet_to_delete = bullet
-                to_delete = True
                 break
-        if (to_delete):
+        if bullet_to_delete is not None:
             GameObjects.alive_asteroids -= 1
             bullet_to_delete.kill()
             self.kill()
+            del GameObjects.asteroids[self]
+            del GameObjects.bullets[bullet_to_delete]
 
     @property
     def offset_rect(self):

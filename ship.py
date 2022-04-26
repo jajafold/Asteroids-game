@@ -19,14 +19,18 @@ class Ship(pygame.sprite.Sprite):
         self.x = 500
         self.y = 500
         self.ship_image = pygame.image.load('ship.png')
+        self.rect = self.ship_image.get_rect()
+
         self.direction = Vector2D(0, -1)
         self.velocity = Vector2D(0, 0)
         self.SHOOT_DELAY = Ship.SHOOT_DELAY
         self.can_shoot = True
+        self.alive = True
 
     def update(self): 
         self.move()
         self.fire()
+        self.detect_collision()
         self.check_inbounds()
         if self.velocity.length > self.MAX_VELOCITY:
             self.velocity /= self.velocity.length
@@ -36,6 +40,12 @@ class Ship(pygame.sprite.Sprite):
         self.y += self.velocity.y
 
         self.rotate()
+
+    def detect_collision(self):
+        for asteroid in GameObjects.asteroids.keys():
+            if pygame.Rect.colliderect(self.offset_rect, GameObjects.asteroids[asteroid]):
+                self.kill()
+                self.alive = False
     
     def fire(self):
         keys = pygame.key.get_pressed()
@@ -87,3 +97,9 @@ class Ship(pygame.sprite.Sprite):
             self.x = -33
         if self.x < -66:
             self.x = GameObjects.WIDTH + 33
+
+    @property
+    def offset_rect(self):
+        size = self.ship_image.get_size()
+        self.rect.center = (self.x + size[0] / 2, self.y + size[1] / 2)
+        return self.rect
