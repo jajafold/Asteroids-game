@@ -1,7 +1,7 @@
 import math
 import pygame
-from Vector2D import Vector2D
-from bullet import Bullet
+from src.utils.Vector2D import Vector2D
+from src.bullet import Bullet
 from game_objects import GameObjects
 
 
@@ -18,7 +18,7 @@ class Ship(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.x = 500
         self.y = 500
-        self.ship_image = pygame.image.load('ship.png')
+        self.ship_image = pygame.image.load('img/ship.png')
         self.rect = self.ship_image.get_rect()
 
         self.direction = Vector2D(0, -1)

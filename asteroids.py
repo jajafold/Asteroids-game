@@ -1,10 +1,10 @@
 import pygame
 
 import game_objects
-from ship import Ship
+from src.ship import Ship
 from game_objects import GameObjects
-from asteroid import Asteroid
-from Vector2D import get_random_vector
+from src.asteroid import Asteroid
+from src.utils.Vector2D import get_random_vector
 
 
 def main():

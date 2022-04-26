@@ -3,11 +3,11 @@ from game_objects import GameObjects
 import pygame
 
 import random
-from Vector2D import Vector2D
+from src.utils.Vector2D import Vector2D
 
 
 class Asteroid(pygame.sprite.Sprite):
-    skins = ["meteor_big.png", "meteor_medium.png", "meteor_small.png"]
+    skins = ["img/meteor_big.png", "img/meteor_medium.png", "img/meteor_small.png"]
     
     def __init__(self, x, y, direction: Vector2D):
         pygame.sprite.Sprite.__init__(self)

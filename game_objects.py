@@ -8,7 +8,7 @@ class GameObjects:
     MAX_ASTEROIDS = 20
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Asteroids")
-    bg = pygame.image.load('bg.png')
+    bg = pygame.image.load('img/bg.png')
     unit_group = pygame.sprite.Group()
     asteroid_group = pygame.sprite.Group()
     bullets_group = pygame.sprite.Group()

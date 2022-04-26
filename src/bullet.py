@@ -9,7 +9,7 @@ class Bullet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.x = x
         self.y = y
-        self.bullet_image = pygame.image.load("bullet.png")
+        self.bullet_image = pygame.image.load("img/bullet.png")
         self.velocity = velocity * Bullet.VELOCITY_CONST
         self.rect = self.bullet_image.get_rect()
 
