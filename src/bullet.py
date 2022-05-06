@@ -21,14 +21,17 @@ class Bullet(pygame.sprite.Sprite):
         self.y += self.velocity.y
 
         GameObjects.window.blit(self.bullet_image, (self.x, self.y))
-    
+
     def check_inbounds(self):
         if not self.is_inbounds:
             self.kill()
-    
+
     @property
     def is_inbounds(self):
-        return self.y >= GameObjects.HEIGHT + 66 or self.y < -66 or self.x >= GameObjects.WIDTH + 66 or self.x < -66
+        return self.y >= GameObjects.HEIGHT + 66 or\
+               self.y < -66 or\
+               self.x >= GameObjects.WIDTH + 66 or\
+               self.x < -66
 
     @property
     def offset_rect(self):

@@ -6,13 +6,11 @@ from game_objects import GameObjects
 
 
 class Ship(pygame.sprite.Sprite):
-    SHOOT_DELAY = 10
-    ACCELERATION = 1
+    delay = 10
+    ACCELERATION = 0.5
     REVERSE_ACCELERATION = -0.05
     MAX_VELOCITY = 15
     ROTATION_ANGLE = math.pi/18
-
-    angle = 0
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -20,14 +18,16 @@ class Ship(pygame.sprite.Sprite):
         self.y = 500
         self.ship_image = pygame.image.load('img/ship.png')
         self.rect = self.ship_image.get_rect()
+        self.angle = 0
+        self.hp = GameObjects.hp
 
         self.direction = Vector2D(0, -1)
         self.velocity = Vector2D(0, 0)
-        self.SHOOT_DELAY = Ship.SHOOT_DELAY
+        self.delay = Ship.delay
         self.can_shoot = True
         self.alive = True
 
-    def update(self): 
+    def update(self):
         self.move()
         self.fire()
         self.detect_collision()
@@ -42,24 +42,36 @@ class Ship(pygame.sprite.Sprite):
         self.rotate()
 
     def detect_collision(self):
+        collided_asteroid = None
         for asteroid in GameObjects.asteroids.keys():
-            if pygame.Rect.colliderect(self.offset_rect, GameObjects.asteroids[asteroid]):
-                self.kill()
-                self.alive = False
-    
+            if pygame.Rect.colliderect(self.offset_rect,
+                                       GameObjects.asteroids[asteroid]):
+                collided_asteroid = asteroid
+
+        if collided_asteroid is not None:
+            del GameObjects.asteroids[collided_asteroid]
+            collided_asteroid.kill()
+            self.hp -= 1
+            GameObjects.hp -= 1
+
+        if self.hp == 0:
+            self.kill()
+            self.alive = False
+
     def fire(self):
         keys = pygame.key.get_pressed()
 
         if not self.can_shoot:
-            self.SHOOT_DELAY -= 1
-        
-        if self.SHOOT_DELAY <= 0:
+            self.delay -= 1
+
+        if self.delay <= 0:
             self.can_shoot = True
-            
+
         if keys[pygame.K_SPACE] and self.can_shoot:
-            Bullet(self.x + self.direction.x, self.y + self.direction.y, self.direction)
+            Bullet(self.x + self.direction.x,
+                   self.y + self.direction.y, self.direction)
             self.can_shoot = False
-            self.SHOOT_DELAY = Ship.SHOOT_DELAY
+            self.delay = Ship.delay
 
     def rotate(self):
         rotated = self.rot_center(self.angle)
@@ -67,7 +79,8 @@ class Ship(pygame.sprite.Sprite):
 
     def rot_center(self, angle):
         rotated_image = pygame.transform.rotate(self.ship_image, angle)
-        new_rect = rotated_image.get_rect(center=self.ship_image.get_rect(center=(self.x, self.y)).center)
+        image_center = self.ship_image.get_rect(center=(self.x, self.y)).center
+        new_rect = rotated_image.get_rect(center=image_center)
 
         return rotated_image, new_rect
 
@@ -87,7 +100,7 @@ class Ship(pygame.sprite.Sprite):
 
         if keys[pygame.K_w] and self.y >= 0:
             self.velocity += self.direction * self.ACCELERATION
-    
+
     def check_inbounds(self):
         if self.y >= GameObjects.HEIGHT + 66:
             self.y = -33

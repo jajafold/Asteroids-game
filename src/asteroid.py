@@ -7,8 +7,10 @@ from src.utils.Vector2D import Vector2D
 
 
 class Asteroid(pygame.sprite.Sprite):
-    skins = ["img/meteor_big.png", "img/meteor_medium.png", "img/meteor_small.png"]
-    
+    skins = ["img/meteor_big.png",
+             "img/meteor_medium.png",
+             "img/meteor_small.png"]
+
     def __init__(self, x, y, direction: Vector2D):
         pygame.sprite.Sprite.__init__(self)
         self.x = x
@@ -18,7 +20,7 @@ class Asteroid(pygame.sprite.Sprite):
         self.rect = self.image.get_bounding_rect()
 
         GameObjects.asteroids[self] = self.offset_rect
-    
+
     def update(self):
         self.x += self.direction.x
         self.y += self.direction.y
@@ -31,11 +33,13 @@ class Asteroid(pygame.sprite.Sprite):
     def detect_collision(self):
         bullet_to_delete = None
         for bullet in GameObjects.bullets.keys():
-            if pygame.Rect.colliderect(self.offset_rect, GameObjects.bullets[bullet]):
+            if pygame.Rect.colliderect(self.offset_rect,
+                                       GameObjects.bullets[bullet]):
                 bullet_to_delete = bullet
                 break
         if bullet_to_delete is not None:
             GameObjects.alive_asteroids -= 1
+            GameObjects.score += 10
             bullet_to_delete.kill()
             self.kill()
             del GameObjects.asteroids[self]

@@ -2,11 +2,11 @@ import pygame
 
 import game_objects
 from src.ship import Ship
-from game_objects import GameObjects
+from game_objects import GameObjects, update_text
 from src.asteroid import Asteroid
 from src.utils.Vector2D import get_random_vector
 
-
+ 
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -14,7 +14,7 @@ def main():
     GameObjects.unit_group.add(ship)
 
     run = True
-  
+
     while run:
         clock.tick(30)
 
@@ -24,7 +24,12 @@ def main():
         if GameObjects.alive_asteroids < GameObjects.MAX_ASTEROIDS:
             GameObjects.alive_asteroids += 1
             rand_point = game_objects.get_random_corner()
-            GameObjects.asteroid_group.add(Asteroid(rand_point[0], rand_point[1], get_random_vector()))
+            asteroid = Asteroid(rand_point[0],
+                                rand_point[1],
+                                get_random_vector())
+            GameObjects.asteroid_group.add(asteroid)
+
+        update_text()
 
         if not ship.alive:
             run = False

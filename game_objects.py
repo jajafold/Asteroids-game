@@ -5,24 +5,41 @@ import pygame
 class GameObjects:
     WIDTH = 1200
     HEIGHT = 700
-    MAX_ASTEROIDS = 20
+    MAX_ASTEROIDS = 15
+    score = 0
+    hp = 3
+    alive_asteroids = 0
+
     window = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.font.init()
+    font = pygame.font.SysFont("Impact", 30)
+    score_surface = font.render(str(score), False, (255, 255, 255))
+    hp_surface = font.render(str(hp), False, (255, 255, 255))
     pygame.display.set_caption("Asteroids")
     bg = pygame.image.load('img/bg.png')
+
     unit_group = pygame.sprite.Group()
     asteroid_group = pygame.sprite.Group()
     bullets_group = pygame.sprite.Group()
     bullets = {}
     asteroids = {}
-    alive_asteroids = 0
+
+
+def update_text():
+    GameObjects.score_surface = GameObjects.font.render(str(GameObjects.score),
+                                                        False, (255, 255, 255))
+    GameObjects.hp_surface = GameObjects.font.render(str(GameObjects.hp),
+                                                     False, (255, 255, 255))
+    GameObjects.window.blit(GameObjects.score_surface, (20, 20))
+    GameObjects.window.blit(GameObjects.hp_surface, (GameObjects.WIDTH-40, 20))
 
 
 def get_random_corner():
     a = random.randint(0, 3)
     if a == 0:
-        return 0, random.randint(0, GameObjects.HEIGHT)
+        return -20, random.randint(-20, GameObjects.HEIGHT + 20)
     if a == 1:
-        return GameObjects.WIDTH, random.randint(0, GameObjects.HEIGHT)
+        return GameObjects.WIDTH + 20, random.randint(-20, GameObjects.HEIGHT + 20)
     if a == 2:
-        return random.randint(0, GameObjects.WIDTH), 0
-    return random.randint(0, GameObjects.WIDTH), GameObjects.HEIGHT
+        return random.randint(-20, GameObjects.WIDTH + 20), -20
+    return random.randint(-20, GameObjects.WIDTH + 20), GameObjects.HEIGHT + 20
