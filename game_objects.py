@@ -1,11 +1,14 @@
 import random
 import pygame
+from src.mouse import Mouse
 
 
 class GameObjects:
     WIDTH = 1200
     HEIGHT = 700
     MAX_ASTEROIDS = 15
+    EVENT_START = 3393
+
     score = 0
     hp = 3
     alive_asteroids = 0
@@ -17,6 +20,7 @@ class GameObjects:
     hp_surface = font.render(str(hp), False, (255, 255, 255))
     pygame.display.set_caption("Asteroids")
     bg = pygame.image.load('img/bg.png')
+    mouse = Mouse()
 
     unit_group = pygame.sprite.Group()
     asteroid_group = pygame.sprite.Group()
