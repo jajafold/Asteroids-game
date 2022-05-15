@@ -6,12 +6,16 @@ from src.mouse import Mouse
 class GameObjects:
     WIDTH = 1200
     HEIGHT = 700
-    MAX_ASTEROIDS = 15
     EVENT_START = 3393
+    LEVEL_ONE_ASTEROIDS = 15
+    LEVEL_TWO_ASTEROIDS = 20
+    LEVEL_THREE_ASTEROIDS = 25
 
+    current_level = 1
     score = 0
     hp = 3
     alive_asteroids = 0
+    killed_asteroids_on_level = 0
 
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.font.init()
@@ -35,7 +39,9 @@ def update_text():
     GameObjects.hp_surface = GameObjects.font.render(str(GameObjects.hp),
                                                      False, (255, 255, 255))
     GameObjects.window.blit(GameObjects.score_surface, (20, 20))
-    GameObjects.window.blit(GameObjects.hp_surface, (GameObjects.WIDTH-40, 20))
+    GameObjects.window.blit(GameObjects.hp_surface, (GameObjects.WIDTH - 40, 20))
+    GameObjects.window.blit(GameObjects.font.render(f"Level {GameObjects.current_level}",
+                                                    False, (255, 255, 255)), (550, 20))
 
 
 def get_random_corner():
@@ -47,3 +53,10 @@ def get_random_corner():
     if a == 2:
         return random.randint(-20, GameObjects.WIDTH + 20), -20
     return random.randint(-20, GameObjects.WIDTH + 20), GameObjects.HEIGHT + 20
+
+
+def change_level(a: int):
+    if a < 0 or a > 3:
+        raise ValueError("wrong level!")
+    GameObjects.current_level = a
+

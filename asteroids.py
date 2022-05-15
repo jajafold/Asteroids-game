@@ -2,13 +2,16 @@ import pygame
 
 import game_objects
 from src.ship import Ship
-from game_objects import GameObjects, update_text
+from game_objects import GameObjects, update_text, change_level
 from src.asteroid import Asteroid
 from src.utils.Vector2D import get_random_vector
 from src.menu import Menu
 
- 
+
 def main():
+    level_asteroids = [GameObjects.LEVEL_ONE_ASTEROIDS,
+                       GameObjects.LEVEL_TWO_ASTEROIDS, GameObjects.LEVEL_THREE_ASTEROIDS]
+
     pygame.init()
     clock = pygame.time.Clock()
     ship = Ship()
@@ -31,14 +34,18 @@ def main():
 
         if not started:
             main_menu.update()
-            #pygame.draw.rect(GameObjects.window, (255, 255, 255), GameObjects.mouse.offset_rect, 1)
+            # pygame.draw.rect(GameObjects.window, (255, 255, 255), GameObjects.mouse.offset_rect, 1)
         else:
-            if GameObjects.alive_asteroids < GameObjects.MAX_ASTEROIDS:
+            if GameObjects.alive_asteroids < level_asteroids[GameObjects.current_level - 1]:
+                if GameObjects.killed_asteroids_on_level == level_asteroids[GameObjects.current_level - 1]:
+                    change_level(GameObjects.current_level + 1)
+                    GameObjects.killed_asteroids_on_level = 0
+                    continue
                 GameObjects.alive_asteroids += 1
                 rand_point = game_objects.get_random_corner()
                 asteroid = Asteroid(rand_point[0],
                                     rand_point[1],
-                                    get_random_vector())
+                                    get_random_vector() * GameObjects.current_level)
                 GameObjects.asteroid_group.add(asteroid)
 
             update_text()

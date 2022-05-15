@@ -39,6 +39,7 @@ class Asteroid(pygame.sprite.Sprite):
                 break
         if bullet_to_delete is not None:
             GameObjects.alive_asteroids -= 1
+            GameObjects.killed_asteroids_on_level += 1
             GameObjects.score += 10
             bullet_to_delete.kill()
             self.kill()
