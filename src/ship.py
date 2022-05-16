@@ -48,6 +48,7 @@ class Ship(pygame.sprite.Sprite):
             collision.kill()
             del GameObjects.bullets[collision]
             self.hp -= 1
+            GameObjects.hp -= 1
 
         collided_asteroid = None
         for asteroid in GameObjects.asteroids.keys():
@@ -76,8 +77,8 @@ class Ship(pygame.sprite.Sprite):
             self.can_shoot = True
 
         if keys[pygame.K_SPACE] and self.can_shoot:
-            Bullet(self.x + self.direction.x * 20,
-                   self.y + self.direction.y * 20, self.direction)
+            Bullet(self.x + self.direction.x * 40,
+                   self.y + self.direction.y * 40, self.direction)
             self.can_shoot = False
             self.delay = Ship.delay
 

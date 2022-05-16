@@ -53,7 +53,7 @@ def main():
                 rand_point = game_objects.get_random_corner()
                 dot_vec = Vector2D(rand_point[0], rand_point[1])
                 summa = center - dot_vec
-                result = dot_vec + (summa/summa.length) * 70
+                result = dot_vec + (summa/summa.length) * 100
 
                 GameObjects.ufo_group.add(Ufo(result.x,
                                               result.y,
