@@ -1,5 +1,5 @@
 from random import random
-from game_objects import GameObjects
+from game_objects import GameObjects, detect_bullet
 import pygame
 
 import random
@@ -31,20 +31,15 @@ class Asteroid(pygame.sprite.Sprite):
         GameObjects.window.blit(self.image, (self.x, self.y))
 
     def detect_collision(self):
-        bullet_to_delete = None
-        for bullet in GameObjects.bullets.keys():
-            if pygame.Rect.colliderect(self.offset_rect,
-                                       GameObjects.bullets[bullet]):
-                bullet_to_delete = bullet
-                break
-        if bullet_to_delete is not None:
+        collision = detect_bullet(self)
+        if collision is not None:
             GameObjects.alive_asteroids -= 1
             GameObjects.killed_asteroids_on_level += 1
             GameObjects.score += 10
-            bullet_to_delete.kill()
+            collision.kill()
             self.kill()
             del GameObjects.asteroids[self]
-            del GameObjects.bullets[bullet_to_delete]
+            del GameObjects.bullets[collision]
 
     @property
     def offset_rect(self):

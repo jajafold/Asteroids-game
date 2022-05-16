@@ -29,8 +29,10 @@ class GameObjects:
     unit_group = pygame.sprite.Group()
     asteroid_group = pygame.sprite.Group()
     bullets_group = pygame.sprite.Group()
+    ufo_group = pygame.sprite.Group()
     bullets = {}
     asteroids = {}
+    ufos = {}
 
 
 def update_text():
@@ -59,4 +61,14 @@ def change_level(a: int):
     if a < 0 or a > 3:
         raise ValueError("wrong level!")
     GameObjects.current_level = a
+
+
+def detect_bullet(obj: pygame.sprite):
+    bullet_to_delete = None
+    for bullet in GameObjects.bullets.keys():
+        if pygame.Rect.colliderect(obj.offset_rect,
+                                   GameObjects.bullets[bullet]):
+            bullet_to_delete = bullet
+            break
+    return bullet_to_delete
 

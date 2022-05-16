@@ -2,7 +2,7 @@ import math
 import pygame
 from src.utils.Vector2D import Vector2D
 from src.bullet import Bullet
-from game_objects import GameObjects
+from game_objects import GameObjects, detect_bullet
 
 
 class Ship(pygame.sprite.Sprite):
@@ -42,6 +42,13 @@ class Ship(pygame.sprite.Sprite):
         self.rotate()
 
     def detect_collision(self):
+        collision = detect_bullet(self)
+        if collision is not None:
+            print("ouch!")
+            collision.kill()
+            del GameObjects.bullets[collision]
+            self.hp -= 1
+
         collided_asteroid = None
         for asteroid in GameObjects.asteroids.keys():
             if pygame.Rect.colliderect(self.offset_rect,
@@ -69,8 +76,8 @@ class Ship(pygame.sprite.Sprite):
             self.can_shoot = True
 
         if keys[pygame.K_SPACE] and self.can_shoot:
-            Bullet(self.x + self.direction.x,
-                   self.y + self.direction.y, self.direction)
+            Bullet(self.x + self.direction.x * 20,
+                   self.y + self.direction.y * 20, self.direction)
             self.can_shoot = False
             self.delay = Ship.delay
 

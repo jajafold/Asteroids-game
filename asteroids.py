@@ -2,9 +2,10 @@ import pygame
 
 import game_objects
 from src.ship import Ship
+from src.ufo import Ufo
 from game_objects import GameObjects, update_text, change_level
 from src.asteroid import Asteroid
-from src.utils.Vector2D import get_random_vector
+from src.utils.Vector2D import get_random_vector, Vector2D
 from src.menu import Menu
 
 
@@ -16,6 +17,7 @@ def main():
     clock = pygame.time.Clock()
     ship = Ship()
     main_menu = Menu(True)
+    center = Vector2D(GameObjects.WIDTH/2, GameObjects.HEIGHT/2)
 
     GameObjects.unit_group.add(ship)
 
@@ -24,7 +26,6 @@ def main():
 
     while run:
         clock.tick(30)
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -48,6 +49,16 @@ def main():
                                     get_random_vector() * GameObjects.current_level)
                 GameObjects.asteroid_group.add(asteroid)
 
+            if GameObjects.killed_asteroids_on_level % 5 == 0 and len(GameObjects.ufos) == 0:
+                rand_point = game_objects.get_random_corner()
+                dot_vec = Vector2D(rand_point[0], rand_point[1])
+                summa = center - dot_vec
+                result = dot_vec + (summa/summa.length) * 70
+
+                GameObjects.ufo_group.add(Ufo(result.x,
+                                              result.y,
+                                              ship))
+
             update_text()
 
             if not ship.alive:
@@ -56,6 +67,7 @@ def main():
             GameObjects.unit_group.update()
             GameObjects.bullets_group.update()
             GameObjects.asteroid_group.update()
+            GameObjects.ufo_group.update()
 
             for el in GameObjects.bullets:
                 GameObjects.bullets[el] = el.offset_rect
