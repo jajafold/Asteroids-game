@@ -44,7 +44,6 @@ class Ship(pygame.sprite.Sprite):
     def detect_collision(self):
         collision = detect_bullet(self)
         if collision is not None:
-            print("ouch!")
             collision.kill()
             del GameObjects.bullets[collision]
             self.hp -= 1

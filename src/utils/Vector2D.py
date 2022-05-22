@@ -46,6 +46,9 @@ class Vector2D:
     def __truediv__(self, a):
         return Vector2D(self.x / a, self.y / a)
 
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
     def __str__(self) -> str:
         return "{0},{1}".format(self.x, self.y)
 
@@ -62,8 +65,8 @@ class Vector2D:
     def angle(self):
         if self.x == 0:
             if self.y > 0:
-                return 90
+                return math.pi/2
             else:
-                return -90
+                return -math.pi/2
 
         return atan(self.y / self.x)
