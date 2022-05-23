@@ -3,10 +3,13 @@ import unittest
 
 import pygame
 
+from src.asteroid import Asteroid
 from src.ship import Ship
+from src.ufo import Ufo
 from src.utils.Vector2D import Vector2D
 from src.bullet import Bullet
-from game_objects import detect_bullet
+from game_objects import detect_collision
+from src.utils.obj_type import ObjectType
 
 
 class TestGame(unittest.TestCase):
@@ -24,11 +27,28 @@ class TestGame(unittest.TestCase):
         new_rect = rotated_image.get_rect(center=image_center)
         self.assertEqual(rotated[1], new_rect)
 
-    def testDetecting(self):
+    def testShipCollisions(self):
         bullet = Bullet(self.ship.x, self.ship.y, Vector2D(1, 1))
-        collision = detect_bullet(self.ship)
+        asteroid = Asteroid(self.ship.x, self.ship.y, Vector2D(1, 1))
+        collision = self.ship.detect_collision()
+        self.assertIsNotNone(collision[0])
+        self.assertIsNotNone(collision[1])
+        self.assertEqual(type(bullet), type(collision[0]))
+        self.assertEqual(type(asteroid), type(collision[1]))
+
+    def testBulletAsteroidCollision(self):
+        bullet = Bullet(self.ship.x, self.ship.y, Vector2D(1, 1))
+        asteroid = Asteroid(self.ship.x, self.ship.y, Vector2D(1, 1))
+        collision = asteroid.detect_collision()
         self.assertIsNotNone(collision)
-        self.assertEqual(bullet, collision)
+        self.assertEqual(type(bullet), type(collision))
+
+    def testUfoBullet(self):
+        bullet = Bullet(self.ship.x + 5, self.ship.y + 5, Vector2D(1, 1))
+        ufo = Ufo(self.ship.x, self.ship.y, self.ship)
+        collision = ufo.detect_collision()
+        self.assertIsNotNone(collision)
+        self.assertEqual(type(bullet), type(collision))
 
     def checkInbounds(self):
         bullet_one = Bullet(self.ship.x, self.ship.y, Vector2D(1, 1))

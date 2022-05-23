@@ -1,6 +1,7 @@
 import random
 import pygame
 from src.mouse import Mouse
+from src.utils.obj_type import ObjectType
 
 
 class GameObjects:
@@ -59,16 +60,22 @@ def get_random_corner():
 
 def change_level(a: int):
     if a < 0 or a > 3:
-        raise ValueError("wrong level!")
+        return True
     GameObjects.current_level = a
 
 
-def detect_bullet(obj: pygame.sprite):
-    bullet_to_delete = None
-    for bullet in GameObjects.bullets.keys():
-        if pygame.Rect.colliderect(obj.offset_rect,
-                                   GameObjects.bullets[bullet]):
-            bullet_to_delete = bullet
-            break
-    return bullet_to_delete
+def detect_collision(obj: pygame.sprite, col_type: ObjectType):
+    if col_type == ObjectType.ASTEROID:
+        obj_dict = GameObjects.asteroids
+    elif col_type == ObjectType.BULLET:
+        obj_dict = GameObjects.bullets
+    else:
+        obj_dict = GameObjects.ufos
 
+    obj_to_delete = None
+    for element in obj_dict.keys():
+        if pygame.Rect.colliderect(obj.offset_rect,
+                                   obj_dict[element]):
+            obj_to_delete = element
+            break
+    return obj_to_delete

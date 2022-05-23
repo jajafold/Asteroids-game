@@ -1,8 +1,10 @@
-from game_objects import GameObjects, detect_bullet
+from game_objects import GameObjects, detect_collision
 from src.bullet import Bullet
 from src.ship import Ship
 from src.utils.Vector2D import Vector2D
 import pygame
+
+from src.utils.obj_type import ObjectType
 
 
 class Ufo(pygame.sprite.Sprite):
@@ -14,7 +16,7 @@ class Ufo(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.image = pygame.image.load(Ufo.skin)
-        self.rect = self.image.get_bounding_rect()
+        self.rect = self.image.get_rect()
         self.delay = 0
         self.ship = ship
 
@@ -37,13 +39,14 @@ class Ufo(pygame.sprite.Sprite):
         self.delay = 0
 
     def detect_collision(self):
-        collision = detect_bullet(self)
-        if collision is not None:
+        collided_bullet = detect_collision(self, ObjectType.BULLET)
+        if collided_bullet is not None:
             GameObjects.score += 50
-            collision.kill()
+            collided_bullet.kill()
             self.kill()
             del GameObjects.ufos[self]
-            del GameObjects.bullets[collision]
+            del GameObjects.bullets[collided_bullet]
+        return collided_bullet
 
     @property
     def offset_rect(self):

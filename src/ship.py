@@ -2,7 +2,8 @@ import math
 import pygame
 from src.utils.Vector2D import Vector2D
 from src.bullet import Bullet
-from game_objects import GameObjects, detect_bullet
+from game_objects import GameObjects, detect_collision
+from src.utils.obj_type import ObjectType
 
 
 class Ship(pygame.sprite.Sprite):
@@ -40,21 +41,17 @@ class Ship(pygame.sprite.Sprite):
         self.y += self.velocity.y
 
         self.rotate()
+        self.check_dead()
 
     def detect_collision(self):
-        collision = detect_bullet(self)
-        if collision is not None:
-            collision.kill()
-            del GameObjects.bullets[collision]
+        collided_bullet = detect_collision(self, ObjectType.BULLET)
+        if collided_bullet is not None:
+            collided_bullet.kill()
+            del GameObjects.bullets[collided_bullet]
             self.hp -= 1
             GameObjects.hp -= 1
 
-        collided_asteroid = None
-        for asteroid in GameObjects.asteroids.keys():
-            if pygame.Rect.colliderect(self.offset_rect,
-                                       GameObjects.asteroids[asteroid]):
-                collided_asteroid = asteroid
-
+        collided_asteroid = detect_collision(self, ObjectType.ASTEROID)
         if collided_asteroid is not None:
             del GameObjects.asteroids[collided_asteroid]
             collided_asteroid.kill()
@@ -62,6 +59,9 @@ class Ship(pygame.sprite.Sprite):
             GameObjects.killed_asteroids_on_level += 1
             GameObjects.hp -= 1
 
+        return collided_bullet, collided_asteroid
+
+    def check_dead(self):
         if self.hp == 0:
             self.kill()
             self.alive = False
@@ -76,8 +76,8 @@ class Ship(pygame.sprite.Sprite):
             self.can_shoot = True
 
         if keys[pygame.K_SPACE] and self.can_shoot:
-            Bullet(self.x + self.direction.x * 40,
-                   self.y + self.direction.y * 40, self.direction)
+            Bullet(self.x + self.direction.x * 45,
+                   self.y + self.direction.y * 45, self.direction)
             self.can_shoot = False
             self.delay = Ship.delay
 

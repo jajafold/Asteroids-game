@@ -39,7 +39,9 @@ def main():
         else:
             if GameObjects.alive_asteroids < level_asteroids[GameObjects.current_level - 1]:
                 if GameObjects.killed_asteroids_on_level == level_asteroids[GameObjects.current_level - 1]:
-                    change_level(GameObjects.current_level + 1)
+                    end = change_level(GameObjects.current_level + 1)
+                    if end:
+                        run = False
                     GameObjects.killed_asteroids_on_level = 0
                     continue
                 GameObjects.alive_asteroids += 1
