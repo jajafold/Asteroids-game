@@ -1,4 +1,5 @@
 import pygame
+
 from game_objects import GameObjects
 from src.button import Button
 
@@ -22,7 +23,6 @@ class Exit_Button(Button):
 
 
 class Menu:
-
     UNSELECTED_SIZE = 50
     SELECTED_SIZE = 64
 
@@ -43,7 +43,7 @@ class Menu:
         self.buttons.append(self.exit_btn)
         # endregion
 
-        #self.renderer = [self.font_unselected.render(button) for button in self.buttons]
+        # self.renderer = [self.font_unselected.render(button) for button in self.buttons]
 
     def update(self):
         if not self.show:
@@ -55,5 +55,5 @@ class Menu:
         for btn in self.buttons:
             render = self.font_btn_unselected.render(btn.label, False, (255, 255, 255))
             GameObjects.window.blit(render, (btn.x, btn.y))
-            #pygame.draw.rect(GameObjects.window, (255, 255, 255), btn.offset_rect, 1)
+            # pygame.draw.rect(GameObjects.window, (255, 255, 255), btn.offset_rect, 1)
             btn.update()

@@ -1,5 +1,7 @@
 import random
+
 import pygame
+
 from src.mouse import Mouse
 from src.utils.obj_type import ObjectType
 
@@ -62,6 +64,19 @@ def change_level(a: int):
     if a < 0 or a > 3:
         return True
     GameObjects.current_level = a
+
+
+def update_all():
+    GameObjects.unit_group.update()
+    GameObjects.bullets_group.update()
+    GameObjects.asteroid_group.update()
+    GameObjects.ufo_group.update()
+
+    for el in GameObjects.bullets:
+        GameObjects.bullets[el] = el.offset_rect
+
+    for el in GameObjects.asteroids:
+        GameObjects.asteroids[el] = el.offset_rect
 
 
 def detect_collision(obj: pygame.sprite, col_type: ObjectType):

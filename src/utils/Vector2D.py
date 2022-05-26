@@ -55,7 +55,7 @@ class Vector2D:
     def rotate(self, angle):
         new_vec = Vector2D(self.x * cos(angle) - self.y * sin(angle),
                            self.x * sin(angle) + self.y * cos(angle))
-        return new_vec/new_vec.length
+        return new_vec / new_vec.length
 
     @property
     def length(self):
@@ -65,8 +65,8 @@ class Vector2D:
     def angle(self):
         if self.x == 0:
             if self.y > 0:
-                return math.pi/2
+                return math.pi / 2
             else:
-                return -math.pi/2
+                return -math.pi / 2
 
         return atan(self.y / self.x)

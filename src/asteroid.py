@@ -1,10 +1,10 @@
-from random import random
-from game_objects import GameObjects, detect_collision
-from src.utils.obj_type import ObjectType
+import random
+
 import pygame
 
-import random
+from game_objects import GameObjects, detect_collision
 from src.utils.Vector2D import Vector2D
+from src.utils.obj_type import ObjectType
 
 
 class Asteroid(pygame.sprite.Sprite):

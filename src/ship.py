@@ -1,8 +1,10 @@
 import math
+
 import pygame
-from src.utils.Vector2D import Vector2D
-from src.bullet import Bullet
+
 from game_objects import GameObjects, detect_collision
+from src.bullet import Bullet
+from src.utils.Vector2D import Vector2D
 from src.utils.obj_type import ObjectType
 
 
@@ -11,7 +13,7 @@ class Ship(pygame.sprite.Sprite):
     ACCELERATION = 0.5
     REVERSE_ACCELERATION = -0.05
     MAX_VELOCITY = 15
-    ROTATION_ANGLE = math.pi/18
+    ROTATION_ANGLE = math.pi / 18
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)

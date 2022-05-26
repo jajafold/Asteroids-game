@@ -1,9 +1,9 @@
+import pygame
+
 from game_objects import GameObjects, detect_collision
 from src.bullet import Bullet
 from src.ship import Ship
 from src.utils.Vector2D import Vector2D
-import pygame
-
 from src.utils.obj_type import ObjectType
 
 
@@ -20,7 +20,6 @@ class Ufo(pygame.sprite.Sprite):
         self.delay = 0
         self.ship = ship
 
-        print(f"spawned on {self.x} {self.y}")
         GameObjects.ufos[self] = self.offset_rect
 
     def update(self):
@@ -35,7 +34,7 @@ class Ufo(pygame.sprite.Sprite):
     def shoot(self):
         direction = Vector2D(self.ship.x - self.x, self.ship.y - self.y)
         direction /= direction.length
-        Bullet(self.x + direction.x * 50, self.y + direction.y * 50, direction/direction.length)
+        Bullet(self.x + direction.x * 50, self.y + direction.y * 50, direction / direction.length)
         self.delay = 0
 
     def detect_collision(self):

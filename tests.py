@@ -4,12 +4,10 @@ import unittest
 import pygame
 
 from src.asteroid import Asteroid
+from src.bullet import Bullet
 from src.ship import Ship
 from src.ufo import Ufo
 from src.utils.Vector2D import Vector2D
-from src.bullet import Bullet
-from game_objects import detect_collision
-from src.utils.obj_type import ObjectType
 
 
 class TestGame(unittest.TestCase):
@@ -79,7 +77,7 @@ class TestVector(unittest.TestCase):
         self.assertEqual(Vector2D(2, 1), b / size)
         b *= size
         self.assertEqual(Vector2D(18, 9), b)
-        b /= size**2
+        b /= size ** 2
         self.assertEqual(Vector2D(2, 1), b)
 
     def testLen(self):
@@ -88,7 +86,7 @@ class TestVector(unittest.TestCase):
 
     def testRotate(self):
         a = Vector2D(1, 0)
-        rotated_a = a.rotate(math.pi/2)
+        rotated_a = a.rotate(math.pi / 2)
         self.assertAlmostEqual(0, rotated_a.x, delta=1e-10)
         self.assertAlmostEqual(1, rotated_a.y, delta=1e-10)
 
@@ -98,9 +96,9 @@ class TestVector(unittest.TestCase):
         c = Vector2D(1, 1)
         d = Vector2D(1, -1)
         self.assertEqual(0, a.angle)
-        self.assertEqual(math.pi/2, b.angle)
-        self.assertEqual(math.pi/4, c.angle)
-        self.assertEqual(-math.pi/4, d.angle)
+        self.assertEqual(math.pi / 2, b.angle)
+        self.assertEqual(math.pi / 4, c.angle)
+        self.assertEqual(-math.pi / 4, d.angle)
 
     def testStr(self):
         a = Vector2D(2, 5)
