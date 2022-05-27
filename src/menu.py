@@ -31,15 +31,25 @@ class Menu:
         self.buttons = []
         pygame.font.init()
 
-        self.font_btn_unselected = pygame.font.SysFont("Impact", Menu.UNSELECTED_SIZE)
-        self.font_btn_selected = pygame.font.SysFont("Impact", Menu.SELECTED_SIZE)
+        self.font_btn_unselected = pygame.font.SysFont(
+            "Impact", Menu.UNSELECTED_SIZE)
+        self.font_btn_selected = pygame.font.SysFont(
+            "Impact", Menu.SELECTED_SIZE)
         self.font_game_name = pygame.font.SysFont("Courier New", 142)
 
         # region Buttons
-        self.start_btn = Start_Button(GameObjects.WIDTH / 2 - 50, 350, "Start", self.font_btn_unselected)
+        self.start_btn = Start_Button(
+            GameObjects.WIDTH / 2 - 50,
+            350,
+            "Start",
+            self.font_btn_unselected)
         self.buttons.append(self.start_btn)
 
-        self.exit_btn = Exit_Button(GameObjects.WIDTH / 2 - 50, 450, "Exit", self.font_btn_unselected)
+        self.exit_btn = Exit_Button(
+            GameObjects.WIDTH / 2 - 50,
+            450,
+            "Exit",
+            self.font_btn_unselected)
         self.buttons.append(self.exit_btn)
         # endregion
 
@@ -49,11 +59,13 @@ class Menu:
         if not self.show:
             return
 
-        render = self.font_game_name.render("Asteroids", False, (255, 255, 255))
+        render = self.font_game_name.render(
+            "Asteroids", False, (255, 255, 255))
         GameObjects.window.blit(render, (220, 100))
 
         for btn in self.buttons:
-            render = self.font_btn_unselected.render(btn.label, False, (255, 255, 255))
+            render = self.font_btn_unselected.render(
+                btn.label, False, (255, 255, 255))
             GameObjects.window.blit(render, (btn.x, btn.y))
             # pygame.draw.rect(GameObjects.window, (255, 255, 255), btn.offset_rect, 1)
             btn.update()

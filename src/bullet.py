@@ -30,9 +30,9 @@ class Bullet(pygame.sprite.Sprite):
     @property
     def is_inbounds(self):
         return self.y >= GameObjects.HEIGHT + 66 or\
-               self.y < -66 or\
-               self.x >= GameObjects.WIDTH + 66 or\
-               self.x < -66
+            self.y < -66 or\
+            self.x >= GameObjects.WIDTH + 66 or\
+            self.x < -66
 
     @property
     def offset_rect(self):

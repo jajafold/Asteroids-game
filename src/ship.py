@@ -58,7 +58,7 @@ class Ship(pygame.sprite.Sprite):
             del GameObjects.asteroids[collided_asteroid]
             collided_asteroid.kill()
             self.hp -= 1
-            GameObjects.killed_asteroids_on_level += 1
+            GameObjects.killed_asteroids += 1
             GameObjects.hp -= 1
 
         return collided_bullet, collided_asteroid

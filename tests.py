@@ -21,7 +21,8 @@ class TestGame(unittest.TestCase):
     def testRotating(self):
         rotated = self.ship.rot_center(30)
         rotated_image = pygame.transform.rotate(self.ship.ship_image, 30)
-        image_center = self.ship.ship_image.get_rect(center=(self.ship.x, self.ship.y)).center
+        image_center = self.ship.ship_image.get_rect(
+            center=(self.ship.x, self.ship.y)).center
         new_rect = rotated_image.get_rect(center=image_center)
         self.assertEqual(rotated[1], new_rect)
 

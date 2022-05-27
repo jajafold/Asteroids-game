@@ -14,7 +14,8 @@ class Button(pygame.sprite.Sprite):
         self.rect = pygame.rect.Rect((0, 0), (self.size[0], self.size[1]))
 
     def update(self):
-        if pygame.Rect.colliderect(self.offset_rect, GameObjects.mouse.offset_rect) \
+        if pygame.Rect.colliderect(self.offset_rect,
+                                   GameObjects.mouse.offset_rect) \
                 and GameObjects.mouse.pressed:
             self.on_click()
 
@@ -26,5 +27,7 @@ class Button(pygame.sprite.Sprite):
 
     @property
     def offset_rect(self):
-        self.rect.center = (self.x + self.size[0] / 2, self.y + self.size[1] / 2)
+        self.rect.center = (
+            self.x + self.size[0] / 2,
+            self.y + self.size[1] / 2)
         return self.rect

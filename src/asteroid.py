@@ -35,7 +35,7 @@ class Asteroid(pygame.sprite.Sprite):
         collision = detect_collision(self, ObjectType.BULLET)
         if collision is not None:
             GameObjects.alive_asteroids -= 1
-            GameObjects.killed_asteroids_on_level += 1
+            GameObjects.killed_asteroids += 1
             GameObjects.score += 10
             collision.kill()
             self.kill()

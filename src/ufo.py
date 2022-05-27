@@ -34,7 +34,15 @@ class Ufo(pygame.sprite.Sprite):
     def shoot(self):
         direction = Vector2D(self.ship.x - self.x, self.ship.y - self.y)
         direction /= direction.length
-        Bullet(self.x + direction.x * 50, self.y + direction.y * 50, direction / direction.length)
+        Bullet(
+            self.x +
+            direction.x *
+            50,
+            self.y +
+            direction.y *
+            50,
+            direction /
+            direction.length)
         self.delay = 0
 
     def detect_collision(self):

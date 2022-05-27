@@ -10,15 +10,13 @@ class GameObjects:
     WIDTH = 1200
     HEIGHT = 700
     EVENT_START = 3393
-    LEVEL_ONE_ASTEROIDS = 15
-    LEVEL_TWO_ASTEROIDS = 20
-    LEVEL_THREE_ASTEROIDS = 25
+    LEVEL_ASTEROIDS = [15, 20, 25]
 
     current_level = 1
     score = 0
     hp = 3
     alive_asteroids = 0
-    killed_asteroids_on_level = 0
+    killed_asteroids = 0
 
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.font.init()
@@ -44,9 +42,18 @@ def update_text():
     GameObjects.hp_surface = GameObjects.font.render(str(GameObjects.hp),
                                                      False, (255, 255, 255))
     GameObjects.window.blit(GameObjects.score_surface, (20, 20))
-    GameObjects.window.blit(GameObjects.hp_surface, (GameObjects.WIDTH - 40, 20))
-    GameObjects.window.blit(GameObjects.font.render(f"Level {GameObjects.current_level}",
-                                                    False, (255, 255, 255)), (550, 20))
+    GameObjects.window.blit(GameObjects.hp_surface,
+                            (GameObjects.WIDTH - 40, 20))
+    GameObjects.window.blit(GameObjects.font.render
+                            (f"Level {GameObjects.current_level}",
+                             False, (255, 255, 255)), (550, 20))
+    current_level_asteroids \
+        = GameObjects.LEVEL_ASTEROIDS[GameObjects.current_level - 1]
+    to_complete = current_level_asteroids - GameObjects.killed_asteroids
+    need = f"Need to kill {to_complete}"
+    GameObjects.window.blit(GameObjects.
+                            font.render(need,
+                                        False, (255, 255, 255)), (510, 50))
 
 
 def get_random_corner():
@@ -54,7 +61,8 @@ def get_random_corner():
     if a == 0:
         return -20, random.randint(-20, GameObjects.HEIGHT + 20)
     if a == 1:
-        return GameObjects.WIDTH + 20, random.randint(-20, GameObjects.HEIGHT + 20)
+        return GameObjects.WIDTH + \
+               20, random.randint(-20, GameObjects.HEIGHT + 20)
     if a == 2:
         return random.randint(-20, GameObjects.WIDTH + 20), -20
     return random.randint(-20, GameObjects.WIDTH + 20), GameObjects.HEIGHT + 20
@@ -64,6 +72,15 @@ def change_level(a: int):
     if a < 0 or a > 3:
         return True
     GameObjects.current_level = a
+
+
+def display_final():
+    text_surface = GameObjects.font.render(f"You died!",
+                                           False, (255, 255, 255))
+    score_surface = GameObjects.font.render(f"Your score is {GameObjects.score}",
+                                            False, (255, 255, 255))
+    GameObjects.window.blit(text_surface, (530, 320))
+    GameObjects.window.blit(score_surface, (500, 360))
 
 
 def update_all():
@@ -94,3 +111,13 @@ def detect_collision(obj: pygame.sprite, col_type: ObjectType):
             obj_to_delete = element
             break
     return obj_to_delete
+
+
+def kill_all():
+    GameObjects.unit_group.empty()
+    GameObjects.ufo_group.empty()
+    GameObjects.asteroid_group.empty()
+    GameObjects.bullets_group.empty()
+    GameObjects.ufos = {}
+    GameObjects.asteroids = {}
+    GameObjects.bullets = {}

@@ -1,7 +1,7 @@
 import pygame
 
 import game_objects
-from game_objects import GameObjects, update_text, change_level, update_all
+from game_objects import GameObjects, update_text, change_level, update_all, kill_all, display_final
 from src.asteroid import Asteroid
 from src.menu import Menu
 from src.ship import Ship
@@ -28,8 +28,7 @@ def main():
                             get_random_vector() * GameObjects.current_level)
         GameObjects.asteroid_group.add(asteroid)
 
-    level_asteroids = [GameObjects.LEVEL_ONE_ASTEROIDS,
-                       GameObjects.LEVEL_TWO_ASTEROIDS, GameObjects.LEVEL_THREE_ASTEROIDS]
+    level_asteroids = GameObjects.LEVEL_ASTEROIDS
 
     pygame.init()
     clock = pygame.time.Clock()
@@ -53,26 +52,30 @@ def main():
 
         if not started:
             main_menu.update()
-            # pygame.draw.rect(GameObjects.window, (255, 255, 255), GameObjects.mouse.offset_rect, 1)
         else:
-            if GameObjects.alive_asteroids < level_asteroids[GameObjects.current_level - 1]:
-                if GameObjects.killed_asteroids_on_level == level_asteroids[GameObjects.current_level - 1]:
+            if GameObjects.alive_asteroids <\
+                    level_asteroids[GameObjects.current_level - 1]:
+                if GameObjects.killed_asteroids == level_asteroids[
+                        GameObjects.current_level - 1]:
                     end = change_level(GameObjects.current_level + 1)
                     if end:
                         run = False
-                    GameObjects.killed_asteroids_on_level = 0
+                    GameObjects.killed_asteroids = 0
                     continue
                 spawn_asteroid()
 
-            if GameObjects.killed_asteroids_on_level % 5 == 0 and len(GameObjects.ufos) == 0 \
-                    and GameObjects.killed_asteroids_on_level != 0:
+            if GameObjects.killed_asteroids % 5 == 0\
+                    and len(GameObjects.ufos) == 0 \
+                    and GameObjects.killed_asteroids != 0:
                 spawn_ufo()
 
-            update_text()
-            update_all()
-
             if not ship.alive:
-                run = False
+                kill_all()
+                display_final()
+                return 0
+            else:
+                update_text()
+                update_all()
 
         pygame.display.update()
         GameObjects.window.blit(GameObjects.bg, (0, 0))
