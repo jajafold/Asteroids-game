@@ -49,6 +49,8 @@ def update_text():
     GameObjects.window.blit(GameObjects.font.render
                             (f"Level {GameObjects.current_level}",
                              False, (255, 255, 255)), (550, 20))
+    if GameObjects.current_level == 3:
+        return 0
     current_level_asteroids \
         = GameObjects.LEVEL_ASTEROIDS[GameObjects.current_level - 1]
     to_complete = current_level_asteroids - GameObjects.killed_asteroids

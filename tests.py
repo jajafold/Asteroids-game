@@ -5,6 +5,7 @@ import pygame
 
 from src.asteroid import Asteroid
 from src.bullet import Bullet
+from src.heal import Heal
 from src.ship import Ship
 from src.ufo import Ufo
 from src.utils.Vector2D import Vector2D
@@ -41,6 +42,13 @@ class TestGame(unittest.TestCase):
         collision = asteroid.detect_collision()
         self.assertIsNotNone(collision)
         self.assertEqual(type(bullet), type(collision))
+
+    def testShipHealCollision(self):
+        heal = Heal(self.ship.x, self.ship.y, self.ship)
+        collision = self.ship.detect_collision()
+        print(collision)
+        self.assertEqual(type(collision[2]), type(heal))
+        self.assertEqual(self.ship.hp, 3)
 
     def testUfoBullet(self):
         bullet = Bullet(self.ship.x + 5, self.ship.y + 5, Vector2D(1, 1))

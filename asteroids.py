@@ -5,6 +5,7 @@ from game_objects import GameObjects, update_text, change_level, update_all, kil
 from src.asteroid import Asteroid
 from src.menu import Menu
 from src.ship import Ship
+from src.triple import Triplet
 from src.ufo import Ufo
 from src.utils.Vector2D import get_random_vector, Vector2D
 
@@ -55,7 +56,7 @@ def main():
         else:
             if GameObjects.alive_asteroids <\
                     level_asteroids[GameObjects.current_level - 1]:
-                if GameObjects.killed_asteroids == level_asteroids[
+                if GameObjects.killed_asteroids >= level_asteroids[
                         GameObjects.current_level - 1]:
                     end = change_level(GameObjects.current_level + 1)
                     if end:

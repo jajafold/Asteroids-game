@@ -28,6 +28,7 @@ class Ship(pygame.sprite.Sprite):
         self.direction = Vector2D(0, -1)
         self.velocity = Vector2D(0, 0)
         self.delay = Ship.delay
+        self.triple_bullets = 0
         self.can_shoot = True
         self.alive = True
 
@@ -83,10 +84,18 @@ class Ship(pygame.sprite.Sprite):
             self.can_shoot = True
 
         if keys[pygame.K_SPACE] and self.can_shoot:
-            Bullet(self.x + self.direction.x * 45,
-                   self.y + self.direction.y * 45, self.direction)
+            bullet_vec = Vector2D(self.x + self.direction.x * 45,
+                                  self.y + self.direction.y * 45)
+            Bullet(bullet_vec.x, bullet_vec.y, self.direction)
+            if self.triple_bullets:
+                self.triple_fire(bullet_vec)
             self.can_shoot = False
             self.delay = Ship.delay
+
+    def triple_fire(self, bullet_vec):
+        Bullet(bullet_vec.x, bullet_vec.y, self.direction.rotate(-math.pi/6))
+        Bullet(bullet_vec.x, bullet_vec.y, self.direction.rotate(math.pi/6))
+        self.triple_bullets -= 1
 
     def rotate(self):
         rotated = self.rot_center(self.angle)
@@ -103,11 +112,13 @@ class Ship(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
-            self.direction = self.direction.rotate(angle=-self.ROTATION_ANGLE)
+            new_dir = self.direction.rotate(angle=-self.ROTATION_ANGLE)
+            self.direction = new_dir / new_dir.length
             self.angle += 10
 
         if keys[pygame.K_d]:
-            self.direction = self.direction.rotate(angle=self.ROTATION_ANGLE)
+            new_dir = self.direction.rotate(angle=self.ROTATION_ANGLE)
+            self.direction = new_dir / new_dir.length
             self.angle -= 10
 
         if keys[pygame.K_s] and self.y <= GameObjects.HEIGHT:
