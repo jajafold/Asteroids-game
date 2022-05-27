@@ -2,6 +2,7 @@ import pygame
 
 from game_objects import GameObjects, detect_collision
 from src.bullet import Bullet
+from src.heal import Heal
 from src.ship import Ship
 from src.utils.Vector2D import Vector2D
 from src.utils.obj_type import ObjectType
@@ -51,6 +52,7 @@ class Ufo(pygame.sprite.Sprite):
             GameObjects.score += 50
             collided_bullet.kill()
             self.kill()
+            Heal(self.x, self.y, self.ship)
             del GameObjects.ufos[self]
             del GameObjects.bullets[collided_bullet]
         return collided_bullet

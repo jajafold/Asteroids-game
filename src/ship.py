@@ -2,6 +2,7 @@ import math
 
 import pygame
 
+import src.heal
 from game_objects import GameObjects, detect_collision
 from src.bullet import Bullet
 from src.utils.Vector2D import Vector2D
@@ -61,7 +62,11 @@ class Ship(pygame.sprite.Sprite):
             GameObjects.killed_asteroids += 1
             GameObjects.hp -= 1
 
-        return collided_bullet, collided_asteroid
+        collided_item: src.heal.Heal = detect_collision(self, ObjectType.ITEM)
+        if collided_item is not None:
+            collided_item.use()
+
+        return collided_bullet, collided_asteroid, collided_item
 
     def check_dead(self):
         if self.hp == 0:

@@ -31,9 +31,11 @@ class GameObjects:
     asteroid_group = pygame.sprite.Group()
     bullets_group = pygame.sprite.Group()
     ufo_group = pygame.sprite.Group()
+    items_group = pygame.sprite.Group()
     bullets = {}
     asteroids = {}
     ufos = {}
+    items = {}
 
 
 def update_text():
@@ -88,6 +90,7 @@ def update_all():
     GameObjects.bullets_group.update()
     GameObjects.asteroid_group.update()
     GameObjects.ufo_group.update()
+    GameObjects.items_group.update()
 
     for el in GameObjects.bullets:
         GameObjects.bullets[el] = el.offset_rect
@@ -101,8 +104,10 @@ def detect_collision(obj: pygame.sprite, col_type: ObjectType):
         obj_dict = GameObjects.asteroids
     elif col_type == ObjectType.BULLET:
         obj_dict = GameObjects.bullets
-    else:
+    elif col_type == ObjectType.ENEMY:
         obj_dict = GameObjects.ufos
+    else:
+        obj_dict = GameObjects.items
 
     obj_to_delete = None
     for element in obj_dict.keys():
@@ -118,6 +123,8 @@ def kill_all():
     GameObjects.ufo_group.empty()
     GameObjects.asteroid_group.empty()
     GameObjects.bullets_group.empty()
+    GameObjects.items_group.empty()
     GameObjects.ufos = {}
     GameObjects.asteroids = {}
     GameObjects.bullets = {}
+    GameObjects.items = {}
