@@ -31,6 +31,8 @@ def main():
     level_asteroids = GameObjects.LEVEL_ASTEROIDS
 
     pygame.init()
+    pygame.mixer.music.load("snd/menu.mp3")
+    pygame.mixer.music.play()
     clock = pygame.time.Clock()
     ship = Ship()
     main_menu = Menu(True)
@@ -48,6 +50,8 @@ def main():
                 run = False
 
             if event.type == GameObjects.EVENT_START:
+                pygame.mixer.music.load("snd/gameplay.mp3")
+                pygame.mixer.music.play()
                 started = True
 
         if not started:
