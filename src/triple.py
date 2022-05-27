@@ -10,7 +10,7 @@ class Triplet(src.item.Item):
         self.x = x
         self.y = y
         self.ship = ship
-        self.image = pygame.image.load("img/ship.png")
+        self.image = pygame.image.load("img/extra_bullets.png")
         self.rect = self.image.get_rect()
 
         GameObjects.items_group.add(self)

@@ -10,7 +10,7 @@ class Heal(Item):
         self.x = x
         self.y = y
         self.ship = ship
-        self.image = pygame.image.load("img/ship.png")
+        self.image = pygame.image.load("img/medic.png")
         self.rect = self.image.get_rect()
 
         GameObjects.items_group.add(self)
