@@ -21,7 +21,6 @@ class Heal(Item):
 
     def use(self):
         self.ship.hp += 2
-        GameObjects.hp += 2
         self.kill()
         del GameObjects.items[self]
 

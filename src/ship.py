@@ -16,19 +16,19 @@ class Ship(pygame.sprite.Sprite):
     MAX_VELOCITY = 15
     ROTATION_ANGLE = math.pi / 18
 
-    def __init__(self):
+    def __init__(self, debug=False):
         pygame.sprite.Sprite.__init__(self)
         self.x = 500
         self.y = 500
         self.ship_image = pygame.image.load('img/ship.png')
         self.rect = self.ship_image.get_rect()
         self.angle = 0
-        self.hp = GameObjects.hp
+        self.hp = GameObjects.MAX_HP if not debug else 300
 
         self.direction = Vector2D(0, -1)
         self.velocity = Vector2D(0, 0)
         self.delay = Ship.delay
-        self.triple_bullets = 0
+        self.triple_bullets = 0 if not debug else 5000
         self.can_shoot = True
         self.alive = True
 
@@ -53,7 +53,6 @@ class Ship(pygame.sprite.Sprite):
             collided_bullet.kill()
             del GameObjects.bullets[collided_bullet]
             self.hp -= 1
-            GameObjects.hp -= 1
 
         collided_asteroid = detect_collision(self, ObjectType.ASTEROID)
         if collided_asteroid is not None:
@@ -61,7 +60,6 @@ class Ship(pygame.sprite.Sprite):
             collided_asteroid.kill()
             self.hp -= 1
             GameObjects.killed_asteroids += 1
-            GameObjects.hp -= 1
 
         collided_item: src.heal.Heal = detect_collision(self, ObjectType.ITEM)
         if collided_item is not None:
@@ -73,6 +71,7 @@ class Ship(pygame.sprite.Sprite):
         if self.hp == 0:
             self.kill()
             self.alive = False
+            print("dead")
 
     def fire(self):
         keys = pygame.key.get_pressed()

@@ -28,20 +28,42 @@ def main():
                             get_random_vector() * GameObjects.current_level)
         GameObjects.asteroid_group.add(asteroid)
 
+    def update_timeout():
+        nonlocal timeout
+        if timeout > 0:
+            display_final()
+            print(timeout)
+            timeout -= 1
+            return
+        timeout = 90
+        nonlocal started
+        started = False
+
+    def initialize():
+        GameObjects.ship = ship
+        GameObjects.unit_group.add(ship)
+        GameObjects.score = 0
+        GameObjects.killed_asteroids = 0
+        GameObjects.alive_asteroids = 0
+        GameObjects.current_level = 1
+
+    def play_menu_music():
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load("snd/menu.mp3")
+        pygame.mixer.music.play()
+
     level_asteroids = GameObjects.LEVEL_ASTEROIDS
 
     pygame.init()
-    pygame.mixer.music.load("snd/menu.mp3")
-    pygame.mixer.music.play()
     clock = pygame.time.Clock()
-    ship = Ship()
     main_menu = Menu(True)
     center = Vector2D(GameObjects.WIDTH / 2, GameObjects.HEIGHT / 2)
-
-    GameObjects.unit_group.add(ship)
-
+    ship = None
     run = True
     started = False
+    timeout = 90
+
+    play_menu_music()
 
     while run:
         clock.tick(30)
@@ -52,6 +74,8 @@ def main():
             if event.type == GameObjects.EVENT_START:
                 pygame.mixer.music.load("snd/gameplay.mp3")
                 pygame.mixer.music.play()
+                ship = Ship(False)
+                initialize()
                 started = True
 
         if not started:
@@ -63,8 +87,7 @@ def main():
                         GameObjects.current_level - 1]:
                     end = change_level(GameObjects.current_level + 1)
                     if end:
-                        run = False
-                    GameObjects.killed_asteroids = 0
+                        spawn_asteroid()
                     continue
                 spawn_asteroid()
 
@@ -75,8 +98,8 @@ def main():
 
             if not ship.alive:
                 kill_all()
-                display_final()
-                return 0
+                play_menu_music()
+                update_timeout()
             else:
                 update_text()
                 update_all()
