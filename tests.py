@@ -48,7 +48,7 @@ class TestGame(unittest.TestCase):
         collision = self.ship.detect_collision()
         print(collision)
         self.assertEqual(type(collision[2]), type(heal))
-        self.assertEqual(self.ship.hp, 3)
+        self.assertEqual(self.ship.hp, 5)
 
     def testUfoBullet(self):
         bullet = Bullet(self.ship.x + 5, self.ship.y + 5, Vector2D(1, 1))

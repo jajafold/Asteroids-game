@@ -20,7 +20,7 @@ class Triplet(src.item.Item):
         GameObjects.window.blit(self.image, (self.x, self.y))
 
     def use(self):
-        self.ship.triple_bullets = 10
+        self.ship.triple_bullets += 10
         self.kill()
         del GameObjects.items[self]
 

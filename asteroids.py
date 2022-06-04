@@ -1,7 +1,8 @@
 import pygame
 
 import game_objects
-from game_objects import GameObjects, update_text, change_level, update_all, kill_all, display_final
+from game_objects import GameObjects, update_text,\
+    change_level, update_all, kill_all, display_final
 from src.asteroid import Asteroid
 from src.menu import Menu
 from src.ship import Ship
@@ -32,7 +33,6 @@ def main():
         nonlocal timeout
         if timeout > 0:
             display_final()
-            print(timeout)
             timeout -= 1
             return
         timeout = 90
@@ -48,9 +48,10 @@ def main():
         GameObjects.current_level = 1
 
     def play_menu_music():
-        pygame.mixer.music.stop()
-        pygame.mixer.music.load("snd/menu.mp3")
-        pygame.mixer.music.play()
+        if not playing:
+            pygame.mixer.music.stop()
+            pygame.mixer.music.load("snd/menu.mp3")
+            pygame.mixer.music.play()
 
     level_asteroids = GameObjects.LEVEL_ASTEROIDS
 
@@ -60,6 +61,7 @@ def main():
     center = Vector2D(GameObjects.WIDTH / 2, GameObjects.HEIGHT / 2)
     ship = None
     run = True
+    playing = False
     started = False
     timeout = 90
 
@@ -98,6 +100,7 @@ def main():
 
             if not ship.alive:
                 kill_all()
+                playing = False
                 play_menu_music()
                 update_timeout()
             else:

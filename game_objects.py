@@ -39,9 +39,9 @@ class GameObjects:
 
 def update_text():
     score_surface = GameObjects.font.render(str(GameObjects.score),
-                                                        False, (255, 255, 255))
+                                            False, (255, 255, 255))
     hp_surface = GameObjects.font.render(str(GameObjects.ship.hp),
-                                                     False, (255, 255, 255))
+                                         False, (255, 255, 255))
     GameObjects.window.blit(score_surface, (20, 20))
     GameObjects.window.blit(hp_surface,
                             (GameObjects.WIDTH - 40, 20))
@@ -81,9 +81,9 @@ def change_level(a: int):
 def display_final():
     text_surface = GameObjects.font.render(f"You died!",
                                            False, (255, 255, 255))
-    score_surface = GameObjects.font.render(f"Your score is {GameObjects.score}",
+    score_surface = GameObjects.font.render(f"Your score: {GameObjects.score}",
                                             False, (255, 255, 255))
-    GameObjects.window.blit(text_surface, (530, 320))
+    GameObjects.window.blit(text_surface, (520, 320))
     GameObjects.window.blit(score_surface, (500, 360))
 
 

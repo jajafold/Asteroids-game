@@ -61,7 +61,7 @@ class Ship(pygame.sprite.Sprite):
             self.hp -= 1
             GameObjects.killed_asteroids += 1
 
-        collided_item: src.heal.Heal = detect_collision(self, ObjectType.ITEM)
+        collided_item = detect_collision(self, ObjectType.ITEM)
         if collided_item is not None:
             collided_item.use()
 
@@ -71,7 +71,6 @@ class Ship(pygame.sprite.Sprite):
         if self.hp == 0:
             self.kill()
             self.alive = False
-            print("dead")
 
     def fire(self):
         keys = pygame.key.get_pressed()

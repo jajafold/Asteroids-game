@@ -46,7 +46,7 @@ class Vector2D:
     def __truediv__(self, a):
         return Vector2D(self.x / a, self.y / a)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return self.x == other.x and self.y == other.y
 
     def __str__(self) -> str:
